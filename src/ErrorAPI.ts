@@ -1,4 +1,4 @@
-import Logger from '@agrippa-io/node-utils/dist'
+import { Logger } from '@agrippa-io/node-utils'
 
 export default class ErrorAPI extends Error {
   // Class Properties

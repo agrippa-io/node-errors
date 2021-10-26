@@ -1,15 +1,12 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dist_1 = __importDefault(require("@agrippa-io/node-utils/dist"));
+const node_utils_1 = require("@agrippa-io/node-utils");
 class ErrorAPI extends Error {
     constructor(message, status = 500) {
         super();
         this.message = message;
         this.status = status;
-        dist_1.default.error(this);
+        node_utils_1.Logger.error(this);
     }
 }
 exports.default = ErrorAPI;
