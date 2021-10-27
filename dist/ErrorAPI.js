@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorAPI = void 0;
 const node_utils_1 = require("@agrippa-io/node-utils");
 class ErrorAPI extends Error {
     constructor(message, status = 500) {
@@ -9,5 +10,5 @@ class ErrorAPI extends Error {
         node_utils_1.Logger.error(this);
     }
 }
-exports.default = ErrorAPI;
+exports.ErrorAPI = ErrorAPI;
 //# sourceMappingURL=ErrorAPI.js.map

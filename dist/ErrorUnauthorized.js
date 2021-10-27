@@ -1,17 +1,15 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ErrorAPI_1 = __importDefault(require("./ErrorAPI"));
-class ErrorUnauthorized extends ErrorAPI_1.default {
+exports.ErrorUnauthorized = void 0;
+const ErrorAPI_1 = require("./ErrorAPI");
+class ErrorUnauthorized extends ErrorAPI_1.ErrorAPI {
     constructor(message = 'Unauthorized', data = {}) {
         super(message, 401);
         Error.captureStackTrace(this, this.constructor);
         this.name = 'ErrorUnauthorized';
-        this.prototype = ErrorAPI_1.default;
+        this.prototype = ErrorAPI_1.ErrorAPI;
         this.data = data;
     }
 }
-exports.default = ErrorUnauthorized;
+exports.ErrorUnauthorized = ErrorUnauthorized;
 //# sourceMappingURL=ErrorUnauthorized.js.map

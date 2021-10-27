@@ -1,4 +1,4 @@
-import ErrorAPI from './ErrorAPI';
-export default class ErrorIncompleteDataModification extends ErrorAPI {
+import { ErrorAPI } from './ErrorAPI';
+export declare class ErrorIncompleteDataModification extends ErrorAPI {
     constructor(message: string);
 }

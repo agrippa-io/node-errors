@@ -1,4 +1,4 @@
-import ErrorAPI from './ErrorAPI';
-export default class ErrorMissingDependency extends ErrorAPI {
+import { ErrorAPI } from './ErrorAPI';
+export declare class ErrorMissingDependency extends ErrorAPI {
     constructor(message: string);
 }

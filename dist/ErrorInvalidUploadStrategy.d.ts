@@ -1,4 +1,4 @@
-import ErrorAPI from './ErrorAPI';
-export default class ErrorInvalidUploadStrategy extends ErrorAPI {
+import { ErrorAPI } from './ErrorAPI';
+export declare class ErrorInvalidUploadStrategy extends ErrorAPI {
     constructor(message?: string);
 }

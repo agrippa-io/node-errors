@@ -1,4 +1,3 @@
-declare const _default: {
+export declare const MongooseCodes: {
     DUPLICATE_KEY: number;
 };
-export default _default;

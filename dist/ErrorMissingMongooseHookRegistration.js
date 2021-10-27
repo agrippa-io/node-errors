@@ -1,16 +1,14 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ErrorAPI_1 = __importDefault(require("./ErrorAPI"));
-class ErrorMissingMongooseHookRegistration extends ErrorAPI_1.default {
+exports.ErrorMissingMongooseHookRegistration = void 0;
+const ErrorAPI_1 = require("./ErrorAPI");
+class ErrorMissingMongooseHookRegistration extends ErrorAPI_1.ErrorAPI {
     constructor(message) {
         super(`ErrorMissingMongooseHookRegistration: ${message}`, 400);
         Error.captureStackTrace(this, this.constructor);
         this.name = 'ErrorMissingMongooseHookRegistration';
-        this.prototype = ErrorAPI_1.default;
+        this.prototype = ErrorAPI_1.ErrorAPI;
     }
 }
-exports.default = ErrorMissingMongooseHookRegistration;
+exports.ErrorMissingMongooseHookRegistration = ErrorMissingMongooseHookRegistration;
 //# sourceMappingURL=ErrorMissingMongooseHookRegistration.js.map

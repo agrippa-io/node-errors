@@ -1,6 +1,6 @@
 import { Logger } from '@agrippa-io/node-utils'
 
-export default class ErrorAPI extends Error {
+export class ErrorAPI extends Error {
   // Class Properties
   status: number
   message: string

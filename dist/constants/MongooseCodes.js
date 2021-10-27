@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+exports.MongooseCodes = void 0;
+exports.MongooseCodes = {
     DUPLICATE_KEY: 11000,
 };
 //# sourceMappingURL=MongooseCodes.js.map

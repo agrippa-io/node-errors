@@ -1,4 +1,4 @@
-import ErrorAPI from './ErrorAPI';
-export default class ErrorInvalidData extends ErrorAPI {
+import { ErrorAPI } from './ErrorAPI';
+export declare class ErrorInvalidData extends ErrorAPI {
     constructor(message: string, status?: number);
 }

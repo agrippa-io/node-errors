@@ -1,19 +1,17 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const ErrorAPI_1 = __importDefault(require("./ErrorAPI"));
-class ErrorMongoose extends ErrorAPI_1.default {
+exports.ErrorMongoose = void 0;
+const ErrorAPI_1 = require("./ErrorAPI");
+class ErrorMongoose extends ErrorAPI_1.ErrorAPI {
     constructor(message = 'Bad Request', mongooseError = null, data = {}) {
         super(generateEdisenMongooseErrorMessage(message, mongooseError), 422);
         Error.captureStackTrace(this, this.constructor);
         this.name = 'ErrorBadRequest';
-        this.prototype = ErrorAPI_1.default;
+        this.prototype = ErrorAPI_1.ErrorAPI;
         this.data = data;
     }
 }
-exports.default = ErrorMongoose;
+exports.ErrorMongoose = ErrorMongoose;
 function generateEdisenMongooseErrorMessage(message, error) {
     var _a, _b, _c;
     switch (error.name) {

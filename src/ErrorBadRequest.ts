@@ -1,6 +1,6 @@
-import ErrorAPI from './ErrorAPI'
+import { ErrorAPI } from './ErrorAPI'
 
-export default class ErrorBadRequest extends ErrorAPI {
+export class ErrorBadRequest extends ErrorAPI {
   data: any
 
   constructor(message = 'Bad Request', data = {}) {

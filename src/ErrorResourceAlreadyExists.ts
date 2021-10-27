@@ -1,6 +1,6 @@
-import ErrorAPI from './ErrorAPI'
+import { ErrorAPI } from './ErrorAPI'
 
-export default class ErrorResourceAlreadyExists extends ErrorAPI {
+export class ErrorResourceAlreadyExists extends ErrorAPI {
   data: any
 
   constructor(message = 'Resource Already Exists', data = {}) {

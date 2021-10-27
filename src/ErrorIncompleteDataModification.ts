@@ -1,6 +1,6 @@
-import ErrorAPI from './ErrorAPI'
+import { ErrorAPI } from './ErrorAPI'
 
-export default class ErrorIncompleteDataModification extends ErrorAPI {
+export class ErrorIncompleteDataModification extends ErrorAPI {
   constructor(message: string) {
     super(`ErrorIncompleteDataModification: ${message}`)
     Error.captureStackTrace(this, this.constructor)

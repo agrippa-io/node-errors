@@ -1,5 +1,5 @@
-import ErrorAPI from './ErrorAPI';
-export default class ErrorMongoose extends ErrorAPI {
+import { ErrorAPI } from './ErrorAPI';
+export declare class ErrorMongoose extends ErrorAPI {
     data: any;
     constructor(message?: string, mongooseError?: any, data?: {});
 }

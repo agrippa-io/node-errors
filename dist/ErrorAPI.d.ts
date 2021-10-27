@@ -1,4 +1,4 @@
-export default class ErrorAPI extends Error {
+export declare class ErrorAPI extends Error {
     status: number;
     message: string;
     prototype: any;

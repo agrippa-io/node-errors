@@ -1,6 +1,6 @@
-import ErrorAPI from './ErrorAPI'
+import { ErrorAPI } from './ErrorAPI'
 
-export default class ErrorResourceNotFound extends ErrorAPI {
+export class ErrorResourceNotFound extends ErrorAPI {
   data: any
 
   constructor(message = 'Resource not Found', data = {}) {
