@@ -1,6 +1,6 @@
 import { ErrorAPI } from './ErrorAPI'
 
-export default class ErrorMongoose extends ErrorAPI {
+export class ErrorReadOnly extends ErrorAPI {
   data: any
 
   constructor(message = 'Property is Read Only', data = {}) {
