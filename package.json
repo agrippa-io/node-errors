@@ -1,7 +1,8 @@
 {
   "name": "@agrippa-io/node-errors",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "NodeJs Error Library",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
