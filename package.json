@@ -1,6 +1,6 @@
 {
   "name": "@agrippa-io/node-errors",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "NodeJs Error Library",
   "type": "module",
   "main": "dist/index.js",
@@ -30,6 +30,6 @@
     "prettier": "^2.4.1"
   },
   "dependencies": {
-    "@agrippa-io/node-utils": "^1.0.7"
+    "@agrippa-io/node-utils": "^1.0.8"
   }
 }
