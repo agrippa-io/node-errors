@@ -1,4 +1,4 @@
-import { ErrorAPI } from './ErrorAPI'
+import { ErrorAPI } from 'src/ErrorAPI'
 
 export class ErrorInvalidUploadStrategy extends ErrorAPI {
   constructor(message = 'Failed to upload due to invalid Upload Strategy') {

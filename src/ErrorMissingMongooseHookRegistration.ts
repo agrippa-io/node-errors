@@ -1,4 +1,4 @@
-import { ErrorAPI } from './ErrorAPI'
+import { ErrorAPI } from 'src/ErrorAPI'
 
 export class ErrorMissingMongooseHookRegistration extends ErrorAPI {
   constructor(message: string) {

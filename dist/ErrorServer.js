@@ -1,12 +1,15 @@
-import { ErrorAPI } from './ErrorAPI';
-export class ErrorServer extends ErrorAPI {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorServer = void 0;
+const ErrorAPI_1 = require("./ErrorAPI");
+class ErrorServer extends ErrorAPI_1.ErrorAPI {
     data;
     constructor(message = 'Server Error', data = {}) {
         super(message, 500);
         Error.captureStackTrace(this, this.constructor);
         this.name = 'ErrorServer';
-        this.prototype = ErrorAPI;
+        this.prototype = ErrorAPI_1.ErrorAPI;
         this.data = data;
     }
 }
-//# sourceMappingURL=ErrorServer.js.map
+exports.ErrorServer = ErrorServer;

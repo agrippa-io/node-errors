@@ -1,4 +1,4 @@
-import { ErrorAPI } from './ErrorAPI'
+import { ErrorAPI } from 'src/ErrorAPI'
 
 export class ErrorJWTWhitelistMissing extends ErrorAPI {
   constructor(message = 'JWT Token missing from whitelist') {

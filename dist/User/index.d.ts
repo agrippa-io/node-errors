@@ -1,2 +1,2 @@
-export * from './ErrorUserCreate';
-export * from './ErrorUserEmailCollision';
+export * from '../User/ErrorUserCreate';
+export * from '../User/ErrorUserEmailCollision';

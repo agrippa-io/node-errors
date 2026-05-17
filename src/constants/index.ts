@@ -1,1 +1,1 @@
-export * from './MongooseCodes'
+export * from 'src/constants/MongooseCodes'

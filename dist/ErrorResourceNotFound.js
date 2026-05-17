@@ -1,12 +1,15 @@
-import { ErrorAPI } from './ErrorAPI';
-export class ErrorResourceNotFound extends ErrorAPI {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorResourceNotFound = void 0;
+const ErrorAPI_1 = require("./ErrorAPI");
+class ErrorResourceNotFound extends ErrorAPI_1.ErrorAPI {
     data;
     constructor(message = 'Resource not Found', data = {}) {
         super(`ErrorResourceNotFound: ${message}`, 404);
         Error.captureStackTrace(this, this.constructor);
         this.name = 'ErrorResourceNotFound';
-        this.prototype = ErrorAPI;
+        this.prototype = ErrorAPI_1.ErrorAPI;
         this.data = data;
     }
 }
-//# sourceMappingURL=ErrorResourceNotFound.js.map
+exports.ErrorResourceNotFound = ErrorResourceNotFound;

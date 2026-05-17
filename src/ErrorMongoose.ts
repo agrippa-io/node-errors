@@ -1,4 +1,4 @@
-import { ErrorAPI } from './ErrorAPI'
+import { ErrorAPI } from 'src/ErrorAPI'
 
 export class ErrorMongoose extends ErrorAPI {
   data: any
@@ -12,7 +12,7 @@ export class ErrorMongoose extends ErrorAPI {
   }
 }
 
-function generateEdisenMongooseErrorMessage(message, error) {
+function generateEdisenMongooseErrorMessage(message: string, error: any) {
   switch (error.name) {
     case 'ValidationError':
       const secondaryMessage = Object.keys(error.errors)

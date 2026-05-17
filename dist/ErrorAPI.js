@@ -1,5 +1,8 @@
-import { Logger } from '@agrippa-io/node-utils';
-export class ErrorAPI extends Error {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorAPI = void 0;
+const node_utils_1 = require("@agrippa-io/node-utils");
+class ErrorAPI extends Error {
     // Class Properties
     status;
     message;
@@ -8,7 +11,7 @@ export class ErrorAPI extends Error {
         super();
         this.message = message;
         this.status = status;
-        Logger.error(this);
+        node_utils_1.Logger.error(this);
     }
 }
-//# sourceMappingURL=ErrorAPI.js.map
+exports.ErrorAPI = ErrorAPI;

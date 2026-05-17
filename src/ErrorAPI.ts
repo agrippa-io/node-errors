@@ -4,7 +4,7 @@ export class ErrorAPI extends Error {
   // Class Properties
   status: number
   message: string
-  prototype: any
+  prototype!: unknown
 
   constructor(message: string, status = 500) {
     super()
