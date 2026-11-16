@@ -1,37 +1,61 @@
 {
   "name": "@agrippa-io/node-errors",
   "version": "1.0.10",
-  "description": "NodeJs Error Library",
+  "description": "HTTP error classes for @agrippa-io services: HttpError and the 4xx/5xx subclasses. Zero dependencies.",
+  "license": "UNLICENSED",
+  "author": "Agrippa Development Team",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./http": {
+      "types": "./dist/http/index.d.ts",
+      "default": "./dist/http/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "http": [
+        "dist/http/index.d.ts"
+      ]
+    }
+  },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
   ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "test": "vitest run --passWithNoTests",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && node scripts/check-exports.js",
+    "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [
-    "node",
-    "error",
-    "errors"
-  ],
-  "author": "Agrippa Development Team",
-  "license": "MIT",
+  "peerDependencies": {},
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.12.0",
-    "@types/node": "^22.19.19",
+    "@types/node": "^22.10.2",
     "@typescript-eslint/parser": "^8.18.0",
+    "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.17.0",
     "tsc-alias": "^1.8.10",
-    "typescript": "^5.9.3",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.8"
-  },
-  "dependencies": {
-    "@agrippa-io/node-utils": "^1.0.9"
   }
 }
