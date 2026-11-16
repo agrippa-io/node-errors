@@ -1,0 +1,18 @@
+name: release-stage
+
+# Manually cut a release: creates release/<version> from develop with the
+# package.json bump. Merge the release PR into main to publish `latest`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (semver, e.g. 1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  cut-release-branch:
+    uses: agrippa-io/github-actions/.github/workflows/npm-release-stage.yml@v1
+    with: { version: '${{ inputs.version }}' }
+    secrets: { release-token: '${{ secrets.RELEASE_TOKEN }}' }

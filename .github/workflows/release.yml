@@ -1,0 +1,114 @@
+name: release
+
+# Stage on push (github-actions archetype 1, npm staged publishing):
+#   release/** → x.y.z-rc.<run>        (dist-tag staging)
+#   main       → x.y.z                 (dist-tag latest) + GitHub release + back-merge to develop
+#   develop    → x.y.z-dev.<pr>.<sha>  (dist-tag dev), only when the repo variable
+#                STAGE_DEV_BUILDS is 'true' (every merge would need an approval)
+# Versions are STAGED, not published: a maintainer approves each one with 2FA
+# (`npm stage approve <id>` or npmjs.com → Staged Packages), and the job summary
+# prints the commands. This package is public (--access public; it has zero dependencies and nothing secret). NPM_TOKEN can
+# be a granular "Read and write (stage only)" token. Cut a release with the
+# release-stage workflow.
+#
+# Publish jobs are skipped in the template repo itself, so it never publishes
+# @agrippa-io/node-library-template. Repos created from it publish normally.
+
+on:
+  push:
+    branches: [develop, 'release/**', main]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  lint:
+    uses: agrippa-io/github-actions/.github/workflows/npm-lint.yml@v1
+    with: { npm-scope: '@agrippa-io', lint-paths: '.' }
+    secrets: { npm-token: '${{ secrets.NPM_TOKEN }}' }
+
+  test:
+    uses: agrippa-io/github-actions/.github/workflows/npm-test.yml@v1
+    with: { npm-scope: '@agrippa-io', test-command: 'vitest run --coverage' }
+    secrets: { npm-token: '${{ secrets.NPM_TOKEN }}' }
+
+  build:
+    needs: [lint, test]
+    uses: agrippa-io/github-actions/.github/workflows/npm-build.yml@v1
+    with: { npm-scope: '@agrippa-io', upload-artifact: false }
+    secrets: { npm-token: '${{ secrets.NPM_TOKEN }}' }
+
+  compute-dev-suffix:
+    if: github.ref == 'refs/heads/develop' && vars.STAGE_DEV_BUILDS == 'true' && github.repository != 'agrippa-io/node-library-template'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions: { contents: read, pull-requests: read }
+    outputs:
+      suffix: ${{ steps.dev.outputs.suffix }}
+    steps:
+      - id: dev
+        uses: agrippa-io/github-actions/npm/actions/compute-dev-suffix@v1
+
+  publish-dev:
+    if: github.ref == 'refs/heads/develop' && vars.STAGE_DEV_BUILDS == 'true' && github.repository != 'agrippa-io/node-library-template'
+    needs: [build, compute-dev-suffix]
+    uses: agrippa-io/github-actions/.github/workflows/npm-publish-prerelease.yml@v1
+    with:
+      npm-scope: '@agrippa-io'
+      dist-tag: dev
+      version-suffix: ${{ needs.compute-dev-suffix.outputs.suffix }}
+      access: public
+      mode: stage
+    secrets: { npm-token: '${{ secrets.NPM_TOKEN }}' }
+
+  # release-stage creates release/x.y.z at develop's old version, then commits
+  # the bump. Only stage once package.json matches the branch, so the
+  # branch-creation push does not stage a stray rc of the previous version.
+  release-version:
+    if: startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    outputs:
+      matches: ${{ steps.check.outputs.matches }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        shell: bash
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          WANT="${BRANCH#release/}"
+          HAVE=$(node -p "require('./package.json').version")
+          if [ "$WANT" = "$HAVE" ]; then
+            echo "matches=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "matches=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::package.json is $HAVE but the branch is release/$WANT; not staging until the version bump lands."
+          fi
+
+  publish-staging:
+    if: startsWith(github.ref, 'refs/heads/release/') && needs.release-version.outputs.matches == 'true' && github.repository != 'agrippa-io/node-library-template'
+    needs: [build, release-version]
+    uses: agrippa-io/github-actions/.github/workflows/npm-publish-prerelease.yml@v1
+    with:
+      npm-scope: '@agrippa-io'
+      dist-tag: staging
+      version-suffix: rc.${{ github.run_number }}
+      access: public
+      mode: stage
+    secrets: { npm-token: '${{ secrets.NPM_TOKEN }}' }
+
+  publish-prod:
+    if: github.ref == 'refs/heads/main' && github.repository != 'agrippa-io/node-library-template'
+    needs: build
+    permissions: { contents: write, id-token: write }
+    uses: agrippa-io/github-actions/.github/workflows/npm-publish-latest.yml@v1
+    with: { npm-scope: '@agrippa-io', access: public, mode: stage }
+    secrets: { npm-token: '${{ secrets.NPM_TOKEN }}' }
+
+  sync-develop:
+    if: github.ref == 'refs/heads/main'
+    needs: publish-prod
+    uses: agrippa-io/github-actions/.github/workflows/gitflow-sync-back.yml@v1
+    with: { version: '${{ needs.publish-prod.outputs.version }}' }
+    secrets: { release-token: '${{ secrets.RELEASE_TOKEN }}' }
