@@ -6,6 +6,8 @@ updates, so anything that can break a caller is a major.
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-11-16
+
 Rewrite (shared-libs-1 SL-3). See "Migrating from 1.x" in the README.
 
 ### Breaking
