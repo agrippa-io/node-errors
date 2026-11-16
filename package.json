@@ -1,6 +1,6 @@
 {
   "name": "@agrippa-io/node-errors",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "HTTP error classes for @agrippa-io services: HttpError and the 4xx/5xx subclasses. Zero dependencies.",
   "license": "UNLICENSED",
   "author": "Agrippa Development Team",
