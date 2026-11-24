@@ -47,14 +47,18 @@ jobs:
     secrets:
       npm-token: ${{ secrets.NPM_TOKEN }}
 
+  gitleaks:
+    uses: agrippa-io/github-actions/.github/workflows/gitleaks.yml@v1.9.1
+
   ci-ok:
     name: ci-ok
     if: always()
-    needs: [lint, typecheck, test, build]
+    needs: [lint, typecheck, test, build, gitleaks]
     runs-on: ubuntu-latest
     steps:
       - run: |
           [ "${{ needs.lint.result }}" = "success" ] \
             && [ "${{ needs.typecheck.result }}" = "success" ] \
             && [ "${{ needs.test.result }}" = "success" ] \
-            && [ "${{ needs.build.result }}" = "success" ]
+            && [ "${{ needs.build.result }}" = "success" ] \
+            && [ "${{ needs.gitleaks.result }}" = "success" ]
