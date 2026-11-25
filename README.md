@@ -1,7 +1,9 @@
 # @agrippa-io/node-errors
 
 HTTP error classes for `@agrippa-io` node services: `HttpError` and the 4xx/5xx
-subclasses every service used to declare for itself. **Zero dependencies**, so
+subclasses every service used to declare for itself, plus **error catalogs**
+(`defineErrorCatalog`): each error's stable code, status, meaning and
+remediation as data, exported as `errors.json` for the docs platform. **Zero dependencies**, so
 any library can throw them without pulling in Express. Part of
 [shared-libs-1](https://github.com/agrippa-io/agrippa-stack/tree/develop/epics/shared-libs-1) (SL-3).
 
@@ -42,6 +44,33 @@ Everything else becomes a logged `500 { error: 'Internal Server Error' }`.
 
 Root and the `/http` subpath export the same symbols. Constructing an error has
 no side effects.
+
+## Error catalog
+
+Declare a service's domain errors once; throw them by code and publish them
+with the spec ([docs-platform-0](https://github.com/agrippa-io/agrippa-stack/tree/develop/epics/docs-platform-0) slice 04).
+
+```ts
+import { defineErrorCatalog, platformErrorCatalog } from '@agrippa-io/node-errors'
+
+export const errors = defineErrorCatalog({
+  service: 'catalog',
+  errors: [{
+    code: 'PRODUCT_NOT_FOUND', httpStatus: 404, title: 'Product not found',
+    meaning: 'No product has this id in the caller\'s organization.',
+    remediation: 'Check the id; list products to find it.', retryable: false
+  }]
+})
+
+throw errors.error('PRODUCT_NOT_FOUND', `product ${id} not found`) // a CatalogError (HttpError, status 404, code)
+JSON.stringify(errors)                                             // errors.json
+```
+
+`platformErrorCatalog` holds the errors every operation can return from the
+shared middleware (400 / 401 / 403 / 404 / 409 / 422 / 429 / 500 / 503).
+`parseErrorCatalog(json)` validates an `errors.json` for ingesters. Rules, the
+document format and the platform codes: [src/catalog/README.md](src/catalog/README.md).
+Also available from the `/catalog` subpath.
 
 ## Migrating from 1.x
 
