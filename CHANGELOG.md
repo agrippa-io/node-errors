@@ -6,6 +6,14 @@ updates, so anything that can break a caller is a major.
 
 ## [Unreleased]
 
+### Added
+- Error catalog (docs-platform-0 4.1): `defineErrorCatalog` (code, httpStatus,
+  title, meaning, remediation, retryable; validated, frozen, typed codes),
+  `CatalogError` (an `HttpError` carrying `code`, `title`, `retryable`),
+  `isCatalogError`, the versioned `errors.json` export (`toJSON`,
+  `format: agrippa.error-catalog`, `version: 1`), `parseErrorCatalog` for
+  ingesters, and `platformErrorCatalog`. New `/catalog` subpath export.
+
 ## [2.0.0] - 2026-11-16
 
 Rewrite (shared-libs-1 SL-3). See "Migrating from 1.x" in the README.

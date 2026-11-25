@@ -1,7 +1,7 @@
 {
   "name": "@agrippa-io/node-errors",
   "version": "2.0.0",
-  "description": "HTTP error classes for @agrippa-io services: HttpError and the 4xx/5xx subclasses. Zero dependencies.",
+  "description": "HTTP error classes and the error catalog (defineErrorCatalog) for @agrippa-io services. Zero dependencies.",
   "license": "UNLICENSED",
   "author": "Agrippa Development Team",
   "main": "dist/index.js",
@@ -15,12 +15,19 @@
       "types": "./dist/http/index.d.ts",
       "default": "./dist/http/index.js"
     },
+    "./catalog": {
+      "types": "./dist/catalog/index.d.ts",
+      "default": "./dist/catalog/index.js"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
       "http": [
         "dist/http/index.d.ts"
+      ],
+      "catalog": [
+        "dist/catalog/index.d.ts"
       ]
     }
   },
