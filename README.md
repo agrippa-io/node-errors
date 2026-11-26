@@ -112,6 +112,8 @@ one difference: `access: public`. See the
 
 ## Publishing docs
 
+> **Tutorials** (node-service-docs): [Document a library](https://github.com/agrippa-io/node-service-docs/blob/develop/docs/tutorials/01-document-your-service.md#a-library-or-an-application) · [Using the docs](https://github.com/agrippa-io/node-service-docs/blob/develop/docs/tutorials/05-using-the-docs.md) · [all tutorials](https://github.com/agrippa-io/node-service-docs/blob/develop/docs/tutorials/README.md).
+
 This library's API reference goes to the docs platform (`node-service-docs`) as the
 `library` source `node-errors`, in TypeDoc JSON: `npm run docs:typedoc` writes `docs/typedoc.json`
 (not committed) from every entry point in [`typedoc.json`](typedoc.json), one TypeDoc module
