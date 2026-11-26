@@ -110,20 +110,74 @@ Same flow as every library made from `node-library-template` (gitflow,
 one difference: `access: public`. See the
 [library template README](https://github.com/agrippa-io/node-library-template#readme).
 
-## Published docs
+## Publishing docs
 
-CI publishes this library's API reference to the docs platform
-(`node-service-docs`, docs-platform-0 14.1) on every merge, as a `library`
-source in TypeDoc JSON: `npm run docs:typedoc` writes `docs/typedoc.json`
-(not committed) from every entry point in [`typedoc.json`](typedoc.json), one
-TypeDoc module per `exports` subpath, and the shared
-[`publish-docs` workflow](https://github.com/agrippa-io/github-actions/blob/main/docs/README.md#reusable-workflow-publish-docsyml)
-sends it (job `publish-docs` in `.github/workflows/ci.yml`, after `ci-ok`). The
-reference page shows each export's signature and its TSDoc comment, so the
-first paragraph of a comment is its summary and `@example` blocks become its
-examples. Add a subpath to `exports` and to `typedoc.json` together.
+This library's API reference goes to the docs platform (`node-service-docs`) as the
+`library` source `node-errors`, in TypeDoc JSON: `npm run docs:typedoc` writes `docs/typedoc.json`
+(not committed) from every entry point in [`typedoc.json`](typedoc.json), one TypeDoc module
+per `exports` subpath. The reference page shows each export's signature and its TSDoc
+comment, so the first paragraph of a comment is its summary and `@example` blocks become
+its examples. Add a subpath to `exports` and to `typedoc.json` together.
 
-Pull requests dry-run it; merges publish once the docs host is configured
-(`vars.DOCS_API_URL`, `vars.DOCS_TOKEN_URL`, `vars.DOCS_PUBLISH_CLIENT_ID`, the
-`DOCS_PUBLISH_CLIENT_SECRET` secret) and dry-run with a notice until then.
-`develop` publishes `<version>-dev.<sha>`, `main` the released version.
+The shared [`publish-docs` workflow](https://github.com/agrippa-io/github-actions/blob/main/docs/README.md#reusable-workflow-publish-docsyml) (github-actions `v1.13.0`) does the publishing:
+
+- **Pull requests:** job `publish-docs` in `.github/workflows/ci.yml`, after `ci-ok`,
+  builds the TypeDoc JSON (`npm run docs:typedoc`) and dry-runs the publish: the request is validated, nothing is sent.
+- **Pushes to `develop`, `release/**` and `main`:** job `publish-docs` in `.github/workflows/release.yml`, after
+  its `build` job (lint + test), PUTs the version to `<DOCS_API_URL>/sources/node-errors/versions/<version>`, where
+  `<version>` is `<version>-dev.<sha>` on `develop`, the `package.json` version on `main` and `release/**`.
+- **Until the four settings below exist** it builds, validates and skips the send with a
+  notice. Today that is every run: the docs host isn't deployed yet. It comes with the
+  cloud launch, docs-platform-0 slice 17.
+
+| Setting | Kind | Value |
+|---|---|---|
+| `DOCS_API_URL` | variable | the docs API base, e.g. `https://api.<env>.agrippa.io/docs/v1` |
+| `DOCS_TOKEN_URL` | variable | the OIDC token endpoint (client credentials) |
+| `DOCS_PUBLISH_CLIENT_ID` | variable | the publishing client's id (scope `docs:publish`) |
+| `DOCS_PUBLISH_CLIENT_SECRET` | secret | that client's secret |
+
+They are GitHub Actions organization variables and an organization secret. Slice 17 creates
+them along with the docs host and its publishing client; there is nothing to set per repo.
+
+### Publish to your local docs stack
+
+A GitHub runner can't reach your `localhost`, so CI never hydrates a local docs stack. Do it
+from the workspace root (`repos-agrippa/`, agrippa-stack `develop`), with this repo's
+dependencies installed (`npm ci`): its build command runs first.
+
+1. Start the stack: auth on :4200, authz on :4201, docs on :4370 (`… stack.sh down` stops it).
+
+   ```bash
+   STACK_AUTH_DIR=$PWD/services/node-auth-service STACK_AUTHZ_DIR=$PWD/services/node-service-authz STACK_DOCS_DIR=$PWD/services/node-service-docs github-actions/docs/actions/sdk-contract-stack/stack.sh up
+   ```
+
+2. Publish this repo:
+
+   ```bash
+   npm run docs:publish-local -- --repo packages/node-errors
+   ```
+
+3. Publish every wired repo:
+
+   ```bash
+   npm run docs:publish-local
+   ```
+
+4. Validate without sending: it builds and checks the request, needs no token and
+   sends nothing. Leave out `--repo` to check every repo; add `--no-build` to skip the build when the
+   documents are already built (a repo whose document isn't built then fails with `spec not found`).
+
+   ```bash
+   npm run docs:publish-local -- --repo packages/node-errors --dry-run
+   npm run docs:publish-local -- --no-build --dry-run
+   ```
+
+5. Look at it. `curl http://localhost:4370/sources/node-errors` lists the versions;
+   `…/versions/latest` has the ingest status, counts and diagnostics, and
+   `…/versions/latest/exports` its exports.
+   (The docs UI can't read this stack directly yet: node-service-docs sends no CORS
+   headers, so a browser on :4504 is blocked.)
+
+Local versions are `<version>-dev.<sha>` (plus `.local.<hash>` for uncommitted changes), so
+they never collide with CI's. See [`docs-publish-local.mjs`](https://github.com/agrippa-io/agrippa-stack/blob/develop/deploy/scripts/README.md) for the options.
