@@ -175,8 +175,9 @@ dependencies installed (`npm ci`): its build command runs first.
 
 5. Look at it. `curl http://localhost:4370/sources/node-errors` lists the versions;
    `…/versions/latest` has the ingest status, counts and diagnostics, and
-   `…/versions/latest/exports` its exports. In the docs UI: run `VITE_DATA_SOURCE=live npm run start:dev` in
-   `apps/react-docs` and open http://localhost:4504/sources/node-errors.
+   `…/versions/latest/exports` its exports.
+   (The docs UI can't read this stack directly yet: node-service-docs sends no CORS
+   headers, so a browser on :4504 is blocked.)
 
 Local versions are `<version>-dev.<sha>` (plus `.local.<hash>` for uncommitted changes), so
 they never collide with CI's. See [`docs-publish-local.mjs`](https://github.com/agrippa-io/agrippa-stack/blob/develop/deploy/scripts/README.md) for the options.
