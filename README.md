@@ -109,3 +109,21 @@ Same flow as every library made from `node-library-template` (gitflow,
 `release-stage` → release PR into `main` → staged version → 2FA approval), with
 one difference: `access: public`. See the
 [library template README](https://github.com/agrippa-io/node-library-template#readme).
+
+## Published docs
+
+CI publishes this library's API reference to the docs platform
+(`node-service-docs`, docs-platform-0 14.1) on every merge, as a `library`
+source in TypeDoc JSON: `npm run docs:typedoc` writes `docs/typedoc.json`
+(not committed) from every entry point in [`typedoc.json`](typedoc.json), one
+TypeDoc module per `exports` subpath, and the shared
+[`publish-docs` workflow](https://github.com/agrippa-io/github-actions/blob/main/docs/README.md#reusable-workflow-publish-docsyml)
+sends it (job `publish-docs` in `.github/workflows/ci.yml`, after `ci-ok`). The
+reference page shows each export's signature and its TSDoc comment, so the
+first paragraph of a comment is its summary and `@example` blocks become its
+examples. Add a subpath to `exports` and to `typedoc.json` together.
+
+Pull requests dry-run it; merges publish once the docs host is configured
+(`vars.DOCS_API_URL`, `vars.DOCS_TOKEN_URL`, `vars.DOCS_PUBLISH_CLIENT_ID`, the
+`DOCS_PUBLISH_CLIENT_SECRET` secret) and dry-run with a notice until then.
+`develop` publishes `<version>-dev.<sha>`, `main` the released version.
